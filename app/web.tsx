@@ -40,6 +40,7 @@ const initialEdges = [
       source: 'cat2',
       target: 't1',
       sourceHandle: 'null',
+      type: 'default',
     },
 ];
 
