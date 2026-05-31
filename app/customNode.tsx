@@ -1,8 +1,10 @@
 import { Handle, Position } from '@xyflow/react';
+import showContent from './web'
+import './node.css'
 
 export default function Handles({ data }) {
     return (
-        <div>
+        <div onClick={showContent}>
             <div>
                 {data.label}
             </div>

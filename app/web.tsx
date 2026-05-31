@@ -3,7 +3,7 @@
 import { ReactFlow, Background, Controls } from '@xyflow/react';
 import { useCallback, useState } from 'react';
 import '@xyflow/react/dist/style.css';
-import Handles from './handles'
+import Handles from './customNode'
 import StraightEdge from './straightEdge';
 
 const categories = [
@@ -28,18 +28,26 @@ const initialNodes = [
         id: "t1",
         data: {
             label: "RSA", 
+            description: "RSA IS SO FUN!!!"
         },
         type: "default",
         position: {x: 500, y: 1000},
     },
 ];
 
+const topics = [
+    {
+        name: "RSA",
+        category: "Cryptography",
+        description: "I love RSA!"
+    }
+]
+
 const initialEdges = [
     {
-      id: 'cat2-t1',
-      source: 'cat2',
+      id: 'cat1-t1',
+      source: 'cat1',
       target: 't1',
-      sourceHandle: 'null',
       type: 'default',
     },
 ];
@@ -48,12 +56,15 @@ const edgeTypes = {
     'straightEdge': StraightEdge,
 };
 
-const nodeTypes = { customHandles: Handles}
+const nodeTypes = { 
+    customHandles: Handles
+}
+
+// Showing web-like structure
 const distance = 300
 var root_x = initialNodes[0].position.x
 var root_y = initialNodes[0].position.y
 let category_amount = categories.length;
-
 for (let i = 0; i < categories.length; i++) {
     let angle = 2 * Math.PI / category_amount * i
     let set_sourceHandle = 'HandleTop'
@@ -94,18 +105,34 @@ for (let i = 0; i < categories.length; i++) {
     );
 };
 
+function showContent(desc) {
+    console.log(desc)
+}
+
+const onNodeClick = (event,node) => {
+    console.log('click node', node)
+}
+
+
 export default function Web() {  
     // do loading
 
     const [nodes, setNodes] = useState(initialNodes);
     const [edges, setEdges] = useState(initialEdges);
+    const [isOverlayOpen, openOverlay] = useState(false);
+    const [nodeDescription, displayNodeDescription] = useState(false);
     return (
         <div style={{ height: '100vh', width: '100vw', background: "white", color: "black"}}>
+            <div id="overlay" className={isOverlayOpen ? "open" : ""}>{nodeDescription}</div>
             <ReactFlow 
                 nodes={nodes} 
                 edges={edges}
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
+                onNodeClick={(event,node) => {
+                    openOverlay(!isOverlayOpen)
+                    displayNodeDescription(node.data.description)
+                }}
                 fitView
             />
         </div>
