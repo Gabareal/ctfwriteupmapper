@@ -1,10 +1,11 @@
 'use client'
 
 import { ReactFlow, Background, Controls } from '@xyflow/react';
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import '@xyflow/react/dist/style.css';
-import Handles from './customNode'
-import StraightEdge from './straightEdge';
+import Handles from './components/customNode/customNode'
+import StraightEdge from './components/straightEdge/straightEdge';
+import Overlay from './components/overlay/overlay'
 
 const categories = [
     {name: "Forensics"},
@@ -119,19 +120,23 @@ export default function Web() {
 
     const [nodes, setNodes] = useState(initialNodes);
     const [edges, setEdges] = useState(initialEdges);
-    const [isOverlayOpen, openOverlay] = useState(false);
-    const [nodeDescription, displayNodeDescription] = useState(false);
+    const [nodeData, setNodeData] = useState(false);
     return (
         <div style={{ height: '100vh', width: '100vw', background: "white", color: "black"}}>
-            <div id="overlay" className={isOverlayOpen ? "open" : ""}>{nodeDescription}</div>
+            <Overlay 
+                data={nodeData}
+            />
             <ReactFlow 
                 nodes={nodes} 
                 edges={edges}
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
                 onNodeClick={(event,node) => {
-                    openOverlay(!isOverlayOpen)
-                    displayNodeDescription(node.data.description)
+                    if (nodeData == node.data) {
+                        setNodeData(false)
+                    } else {
+                        setNodeData(node.data)
+                    }
                 }}
                 fitView
             />

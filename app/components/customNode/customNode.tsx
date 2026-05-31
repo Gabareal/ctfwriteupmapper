@@ -1,6 +1,5 @@
 import { Handle, Position } from '@xyflow/react';
-import showContent from './web'
-import './node.css'
+import showContent from '../../web'
 
 export default function Handles({ data }) {
     return (
